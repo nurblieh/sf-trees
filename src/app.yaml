@@ -4,8 +4,16 @@ runtime: python
 api_version: 1
 
 handlers:
-- url: /
-  script: main.py
 - url: /remote_api
+  secure: always
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
   login: admin
+
+- url: /admin/.*
+  secure: always
+  script: $PYTHON_LIB/google/appengine/ext/admin
+  login: admin
+
+- url: /.*
+  script: main.py
+  

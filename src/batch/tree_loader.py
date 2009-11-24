@@ -34,7 +34,7 @@ from google.appengine.tools import bulkloader
 import datetime
 import sys
 
-sys.path.append('.')
+sys.path.append('..')
 import models
 
 class TreeLoader(bulkloader.Loader):
@@ -74,7 +74,7 @@ class TreeLoader(bulkloader.Loader):
     """This runs before the input data has been parsed by the loader."""
     
     # The app engine bulkloader does not provide a means for gracefully
-    # combining two input fields into one output field. """
+    # combining two input fields into one output field.
     values[13] = values[14] + ',' + values[13]
     # Original data provides a unique persistent ID field. So, we 
     # generate the appropriate native Key type based on this ID.
