@@ -22,11 +22,14 @@ import csv
 import logging
 import os
 import urllib
+import sys
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp import template
 from google.appengine.api import urlfetch
+
+sys.path.append('..')
 
 import models
 import geobox
@@ -84,7 +87,7 @@ class MainPage(webapp.RequestHandler):
     self.run()
 
   def run(self):
-    templates_path = os.path.dirname(__file__)
+    templates_path = os.path.join(os.path.dirname(__file__), '../templates')
     index_tmpl = os.path.join(templates_path, 'index.html')
     
     address = self.request.get('address')

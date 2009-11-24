@@ -15,5 +15,5 @@ handlers:
   login: admin
 
 - url: /.*
-  script: main.py
+  script: handlers/main.py
   
