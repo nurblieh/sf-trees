@@ -32,7 +32,7 @@ __author__ = 'nurblieh@gmail.com (Bradley Heilbrun)'
 from google.appengine.ext import db
 from google.appengine.tools import bulkloader
 import datetime
-import sys
+import sys, re
 
 sys.path.append('..')
 import models
@@ -53,7 +53,7 @@ class TreeLoader(bulkloader.Loader):
     dummy = lambda x: None
     
     bulkloader.Loader.__init__(self, 'SFTree',
-                               [('ID', int),
+                               [('tree_id', int),
                                 ('legal_status', str),
                                 ('species', str),
                                 ('address', str),
@@ -76,14 +76,22 @@ class TreeLoader(bulkloader.Loader):
     # The app engine bulkloader does not provide a means for gracefully
     # combining two input fields into one output field.
     values[13] = values[14] + ',' + values[13]
-    # Original data provides a unique persistent ID field. So, we 
-    # generate the appropriate native Key type based on this ID.
-    key_name = db.Key.from_path('SFTrees', int(values[0])).name()
-    return super(TreeLoader, self).create_entity(values, key_name)
+    #key_name = db.Key.from_path('SFTree', int(values[0])).name()
+    #print int(values[0]), key_name, db.Key.from_path('SFTree', int(values[0])).id()
+    if len(values[11]) > 0 and not re.search('^[0-9]', values[11]):
+      values[11] = ""
+    if len(values[4]) == 0:
+      values[4] = 1
+        
+    return super(TreeLoader, self).create_entity(values)
   
   def handle_entity(self, entity):
     """Now that the entity is created. Generate and save the geoboxes."""
     entity.update_geoboxes()
+    # Original data provides a unique persistent ID field. So, we 
+    # generate the appropriate native Key type based on this ID.    
+    entity._key = db.Key.from_path('SFTree', int(entity.tree_id))
+    #print entity._key.id_or_name()
     return entity
 
 

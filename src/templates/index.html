@@ -19,7 +19,7 @@
 		var marker{{ forloop.counter }} = new google.maps.Marker({
 			position: new google.maps.LatLng({{ t.geoloc.lat }},{{ t.geoloc.lon }}),
 			map: map,
-			title: "{{ t.species }}"
+			title: "{{ t.species|escape }}"
 		});
 {% endfor %}
 {% if geoboxes %}

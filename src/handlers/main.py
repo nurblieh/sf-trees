@@ -99,7 +99,7 @@ class MainPage(webapp.RequestHandler):
       # Temporary, so I can visualize the geoboxes.
       geoboxes = build_geoboxes(lat, lon)
       # Find the nearest 100 trees.
-      results = models.SFTree.query(lat, lon, 100, (2,0))
+      results = models.SFTree.query(lat, lon, 25, (2,0))
       trees = [r[1] for r in results]
       zoom = 16
 

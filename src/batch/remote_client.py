@@ -38,5 +38,5 @@ import getpass
 def auth_func():
   return (raw_input('Username:'), getpass.getpass('Password:'))
 
-remote_api_stub.ConfigureRemoteDatastore('sf-trees', '/remote_api', auth_func)
+remote_api_stub.ConfigureRemoteDatastore('sf-trees', '/remote_api', auth_func, secure=True)
 

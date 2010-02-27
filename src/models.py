@@ -17,6 +17,7 @@ def _earth_distance(lat1, lon1, lat2, lon2):
 
 class SFTree(db.Model):
   """SFTree entity datatype."""
+  tree_id = db.IntegerProperty()
   legal_status = db.StringProperty()
   species = db.StringProperty()
   address = db.StringProperty()
@@ -39,24 +40,24 @@ class SFTree(db.Model):
                     (3, 16, False),
                     (2, 5, False))
 
-  @classmethod
-  def create(cls, **kwargs):
-    """Build an SFTree instance suitable for db.put()"""
-    kwargs['tree_id'] = int(kwargs['tree_id'])
-    lat = kwargs.pop('latitude')
-    lon = kwargs.pop('longitude')
-    kwargs['geoloc'] = db.GeoPt(lat, lon)
-    
-    kwargs['geoboxes'] = cls.gen_geoboxes(lat, lon)
-
-    kwargs['tree_order'] = int(kwargs['tree_order'])
-    if kwargs['planting_date']:
-      kwargs['planting_date'] = datetime.strptime(kwargs['planting_date'],
-                                                  '%m/%d/%Y').date()
-    else:
-      kwargs['planting_date'] = None
-      
-    return cls(**kwargs)
+#  @classmethod
+#  def create(cls, **kwargs):
+#    """Build an SFTree instance suitable for db.put()"""
+#    kwargs['tree_id'] = int(kwargs['tree_id'])
+#    lat = kwargs.pop('latitude')
+#    lon = kwargs.pop('longitude')
+#    kwargs['geoloc'] = db.GeoPt(lat, lon)
+#    
+#    kwargs['geoboxes'] = cls.gen_geoboxes(lat, lon)
+#
+#    kwargs['tree_order'] = int(kwargs['tree_order'])
+#    if kwargs['planting_date']:
+#      kwargs['planting_date'] = datetime.strptime(kwargs['planting_date'],
+#                                                  '%m/%d/%Y').date()
+#    else:
+#      kwargs['planting_date'] = None
+#      
+#    return cls(**kwargs)
 
 
   @classmethod
@@ -83,7 +84,7 @@ class SFTree(db.Model):
       query = cls.all()
       query.filter("geoboxes =", box)
       #TODO: more filters
-      results = query.fetch(100)
+      results = query.fetch(999)
       logging.info("Found %d results", len(results))
 
       for result in results:

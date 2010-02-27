@@ -18,7 +18,7 @@
 
 __author__ = "nurblieh@gmail.com (Bradley Heilbrun)"
 
-import sys
+import sys, time, urllib2
 import remote_client
 from google.appengine.ext import db
 
@@ -31,8 +31,23 @@ def main():
   r = q.fetch(100)
   while len(r) > 0:
     print "Deleting %s through %s..." % (r[0].id(), r[-1].id())
-    db.delete(r)
-    r = q.fetch(100)
+    try:
+      db.delete(r)
+    except Exception, e:
+      print e
+      time.sleep(1)
+      continue
+
+    data_available = False
+    # 1 in 20 deletes will return 503 Service Unavailable.
+    while not data_available:
+      try:
+        r = q.fetch(100)
+      except  urllib2.HTTPError, e:
+        print e
+        time.sleep(1)
+        continue
+      data_available = True
     
 if __name__ == '__main__':
   main()

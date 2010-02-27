@@ -14,19 +14,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [[ "$#" -lt 2 ]]; then
+if [[ $# -lt 2 ]]; then
   echo "Usage: $0 <app-host-name> <csv-file>" &>2
   exit
 fi
 
-URL=$1
-CSV=$2
+URL="http://$1/remote_api"
+CSV="$2"
 
-appcfg.py upload_data --config_file=tree_loader.py \
+python2.5 /usr/local/bin/appcfg.py upload_data --config_file=tree_loader.py \
                       --kind=SFTree \
                       --filename="$CSV" \
                       --url="$URL" \
                       --batch_size=50 \
                       --rps_limit=200 \
                       --num_threads=5 \
+                      --db_filename=progress_db.sql3 \
                       ../
+
